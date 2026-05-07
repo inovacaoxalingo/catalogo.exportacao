@@ -8,31 +8,31 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
     font-family: 'Quicksand', sans-serif;
-    background: #1a1a1a;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
+    background: #081d38;
   }
 
   .capa {
     position: relative;
     width: 100%;
-    max-width: 900px;
-    line-height: 0;
+    height: 100vh;
   }
 
   .capa img {
-    display: block;
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
   }
 
   .capa-overlay {
     position: absolute;
-    bottom: 3.5%;
+    bottom: 5%;
     right: 4%;
     z-index: 10;
   }
@@ -64,7 +64,7 @@
 
   @keyframes pulseGlow {
     0%, 100% { box-shadow: 0 8px 30px rgba(0,0,0,0.35); }
-    50% { box-shadow: 0 8px 30px rgba(0,0,0,0.35), 0 0 28px rgba(240,160,48,0.35); }
+    50% { box-shadow: 0 8px 30px rgba(0,0,0,0.35), 0 0 28px rgba(240,160,48,0.4); }
   }
 
   .btn-nav svg { transition: transform 0.2s; }
