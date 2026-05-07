@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo Exportación — Xalingo</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--text:#1B3A5C;--soft:rgba(27,58,92,.5);--accent:#1B3A5C;--gold:#f0a030;--bg:#fff;--surf:#f8f7f5;--bdr:rgba(0,0,0,.08);--green:#2e7d32;--orange:#e65100;--r:13px;
+  --vc-blocos:#7C6EB5;--vc-edu:#6B87C7;--vc-jogos:#E06B55;--vc-faz:#3EBDAD;--vc-rodados:#5DB85A;--vc-esporte:#D4A030;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Quicksand',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+
+.hdr{background:var(--accent);padding:22px 36px;display:flex;align-items:center;justify-content:space-between}
+.htitle{font-family:'Fredoka',sans-serif;font-size:1.5rem;font-weight:700;color:#fff}
+.htitle span{color:var(--gold)}
+.hsub{font-size:.7rem;color:rgba(255,255,255,.4);margin-top:3px}
+.hbadge{display:inline-block;background:var(--gold);color:#fff;font-size:.56rem;font-weight:700;padding:2px 8px;border-radius:100px;margin-top:5px}
+.hstats{display:flex;gap:20px}
+.hn{font-family:'Fredoka',sans-serif;font-size:1.4rem;font-weight:700;color:var(--gold);line-height:1;text-align:center}
+.hl{font-size:.56rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;text-align:center}
+
+.toolbar{position:sticky;top:0;z-index:30;background:#fff;border-bottom:1px solid var(--bdr);padding:9px 36px;display:flex;align-items:center;gap:10px;box-shadow:0 1px 4px rgba(0,0,0,.05)}
+.sw{flex:1;min-width:150px;position:relative}
+.sw input{width:100%;padding:8px 12px 8px 32px;border:1.5px solid var(--bdr);border-radius:9px;font-family:'Quicksand',sans-serif;font-size:.82rem;font-weight:600;color:var(--text);background:var(--surf)}
+.sw input:focus{outline:none;border-color:var(--accent)}
+.sw input::placeholder{color:rgba(27,58,92,.28)}
+.si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:.75rem;opacity:.28}
+.sel{padding:8px 9px;border:1.5px solid var(--bdr);border-radius:9px;font-family:'Quicksand',sans-serif;font-size:.74rem;font-weight:700;color:var(--text);background:var(--surf)}
+.vt{display:flex;gap:2px;background:var(--surf);border-radius:7px;padding:2px;border:1.5px solid var(--bdr)}
+.vb{width:30px;height:30px;border:none;background:transparent;border-radius:5px;cursor:pointer;font-size:.78rem;display:flex;align-items:center;justify-content:center;color:var(--soft)}
+.vb.on{background:var(--accent);color:#fff}
+.cnt{font-size:.68rem;font-weight:700;color:var(--soft);white-space:nowrap}
+
+.frow{background:#fff;border-bottom:1px solid var(--bdr);padding:10px 36px;display:flex;align-items:center;gap:8px;overflow-x:auto}
+.frow::-webkit-scrollbar{display:none}
+.flbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--soft);white-space:nowrap;flex-shrink:0}
+.fbtn{font-family:'Quicksand',sans-serif;font-size:.8rem;font-weight:700;padding:7px 15px;border-radius:100px;border:2px solid var(--bdr);background:#fff;color:var(--soft);cursor:pointer;white-space:nowrap;transition:all .15s}
+.fbtn.on{background:var(--fbtn-vc,var(--accent));color:#fff !important;border-color:var(--fbtn-vc,var(--accent))}
+.fsep{width:1px;height:20px;background:var(--bdr);flex-shrink:0}
+
+.wrap{padding:20px 36px 80px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:13px}
+.grid.lst{grid-template-columns:1fr;gap:4px}
+
+.card{background:#fff;border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .2s;border-left:4px solid var(--vc,var(--bdr))}
+.card:hover{box-shadow:0 8px 32px rgba(0,0,0,.1);border-left-color:var(--vc,var(--accent));transform:translateY(-2px)}
+.cimg{width:100%;aspect-ratio:1;background:var(--vc-bg,var(--surf));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.cimg img{width:84%;height:84%;object-fit:contain;transition:transform .3s}
+.card:hover .cimg img{transform:scale(1.05)}
+.cph{font-size:2rem;opacity:.1}
+.cspin{width:24px;height:24px;border:2.5px solid rgba(27,58,92,.1);border-top-color:var(--accent);border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ctag{position:absolute;top:7px;left:7px;background:var(--vc,rgba(27,58,92,.8));color:#fff;font-size:.49rem;font-weight:700;padding:2px 7px;border-radius:100px;max-width:calc(100% - 44px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.2px}
+.cbody{padding:10px 12px 12px}
+.cref{font-size:.55rem;font-weight:700;color:var(--soft);letter-spacing:.5px;margin-bottom:3px}
+.cname{font-size:.75rem;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:1.95em}
+.csub{font-size:.61rem;font-weight:600;color:var(--soft);margin-top:4px}
+.cfoot{display:flex;align-items:center;justify-content:space-between;margin-top:7px;gap:4px}
+.sb{display:inline-flex;align-items:center;gap:3px;font-size:.59rem;font-weight:700;padding:3px 8px;border-radius:100px}
+.sb.l{background:#e8f5e9;color:var(--green)}
+.sb.z{background:#fff3e0;color:var(--orange)}
+.sb.b{background:#111;color:#fff}
+.sd{width:5px;height:5px;border-radius:50%}
+.sb.l .sd{background:var(--green)}.sb.z .sd{background:var(--orange)}.sb.b .sd{background:#fff;opacity:.7}
+.ext{display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:7px;background:var(--surf);color:var(--soft);font-size:.72rem;text-decoration:none;border:1px solid var(--bdr)}
+.ext:hover{background:var(--accent);color:#fff}
+
+.grid.lst .card{display:flex;align-items:center}
+.grid.lst .cimg{width:66px;height:66px;aspect-ratio:unset;flex-shrink:0;border-radius:8px;margin:5px}
+.grid.lst .cbody{flex:1;padding:7px 10px}
+.grid.lst .cname{-webkit-line-clamp:1}
+
+/* MODAL */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.52);z-index:100;align-items:center;justify-content:center;padding:18px}
+.ov.open{display:flex}
+.mbox{background:#fff;border-radius:18px;max-width:780px;width:100%;display:flex;flex-direction:column;max-height:92vh;box-shadow:0 16px 48px rgba(0,0,0,.18);animation:mani .2s ease;position:relative;overflow:hidden}
+@keyframes mani{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+
+/* Top section: image (left) + ficha técnica (right) side-by-side */
+.mtop{display:flex;flex-shrink:0;border-bottom:1px solid var(--bdr);max-height:340px}
+.mhdr{background:var(--surf);display:flex;align-items:center;justify-content:center;flex:0 0 46%;min-height:280px;position:relative;padding:18px}
+.mhdr img{max-width:90%;max-height:260px;object-fit:contain}
+.mhdr .cph{font-size:3.5rem;opacity:.3}
+.mside{flex:1;background:#fff;padding:18px 20px;overflow-y:auto;display:flex;flex-direction:column}
+
+.mcls{position:absolute;top:11px;right:11px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,.95);cursor:pointer;font-size:.82rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text);z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.mcls:hover{background:#fff;transform:scale(1.05)}
+
+.mbody{padding:16px 21px 22px;overflow-y:auto}
+.mref{font-size:.6rem;font-weight:700;color:var(--soft);letter-spacing:.7px}
+.mtags{margin-top:4px;display:flex;flex-wrap:wrap;gap:4px}
+.mv{background:var(--mv-vc,rgba(27,58,92,.08));color:var(--mv-vctxt,var(--accent));font-size:.59rem;font-weight:700;padding:2px 8px;border-radius:100px}
+.ms{background:rgba(240,160,48,.12);color:#b07020;font-size:.59rem;font-weight:700;padding:2px 8px;border-radius:100px}
+.mname{font-family:'Fredoka',sans-serif;font-size:1.12rem;font-weight:600;line-height:1.25;margin-top:9px}
+.minfo{display:flex;align-items:center;gap:7px;margin-top:11px;flex-wrap:wrap}
+.morig{font-size:.63rem;font-weight:700;background:#f4f4f4;color:var(--soft);padding:3px 9px;border-radius:100px}
+.mlink{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:8px;background:rgba(27,58,92,.06);color:var(--accent);font-size:.7rem;font-weight:700;text-decoration:none}
+.mlink:hover{background:rgba(27,58,92,.12)}
+
+/* Ficha técnica vertical layout (now on the side) */
+.ficha{margin:0}
+.fttl{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--accent);margin-bottom:11px;display:flex;align-items:center;gap:5px}
+.fg{display:flex;flex-direction:column;gap:6px}
+.fi{background:var(--surf);border-radius:8px;padding:8px 12px;border:1px solid rgba(27,58,92,.04)}
+.filbl{font-size:.55rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--soft);margin-bottom:3px}
+.fival{font-size:.82rem;font-weight:700;color:var(--text);word-break:break-word}
+.fload,.fnone{display:flex;align-items:center;gap:8px;font-size:.72rem;font-weight:600;color:var(--soft);padding:8px 0}
+.fnone{font-style:italic;opacity:.7}
+
+.bktop{display:none;position:fixed;bottom:20px;right:20px;width:37px;height:37px;border-radius:50%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-size:.9rem;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:50}
+.bktop.show{display:flex}
+
+@media(max-width:700px){
+  .hdr,.toolbar,.frow,.wrap{padding-left:14px;padding-right:14px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:9px}
+  .mbox{max-width:100%}
+  .mtop{flex-direction:column;max-height:none}
+  .mhdr{flex:none;min-height:200px}
+  .mhdr img{max-height:200px}
+  .mside{padding:14px 18px;border-top:1px solid var(--bdr)}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <div class="htitle">Xalingo <span>Brinquedos</span></div>
+    <div class="hsub">Catálogo de Exportación 2026</div>
+    <div class="hbadge">🌎 Internacional — Español</div>
+  </div>
+  <div class="hstats">
+    <div><div class="hn" id="sT">132</div><div class="hl">Productos</div></div>
+    <div><div class="hn" id="sL">24</div><div class="hl">Lanzamientos</div></div>
+    <div><div class="hn">6</div><div class="hl">Categorías</div></div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="sw">
+    <span class="si">🔍</span>
+    <input type="text" id="q" placeholder="Buscar nombre o referencia...">
+  </div>
+  <select class="sel" id="sort">
+    <option value="vert">Por Categoría</option>
+    <option value="az">Nombre A–Z</option>
+    <option value="za">Nombre Z–A</option>
+    <option value="ra">Ref. ↑</option>
+    <option value="rd">Ref. ↓</option>
+    <option value="lz">Lanzamientos primero</option>
+  </select>
+  <div class="vt">
+    <button class="vb on" id="vg" title="Cuadrícula">▦</button>
+    <button class="vb" id="vl" title="Lista">☰</button>
+  </div>
+  <span class="cnt" id="cnt"></span>
+</div>
+
+<div class="frow" id="frow">
+  <span class="flbl">Categoría</span>
+  <button class="fbtn on" data-vert="all">Todas</button>
+  <button class="fbtn" data-vert="BLOCOS DE MONTAR" data-vc="#7C6EB5">Bloques</button>
+  <button class="fbtn" data-vert="EDUCATIVOS" data-vc="#6B87C7">Educativos</button>
+  <button class="fbtn" data-vert="JOGOS" data-vc="#E06B55">Juegos</button>
+  <button class="fbtn" data-vert="FAZ DE CONTA" data-vc="#3EBDAD">J. Simbólico</button>
+  <button class="fbtn" data-vert="RODADOS" data-vc="#5DB85A">Ruedas</button>
+  <button class="fbtn" data-vert="ESPORTE" data-vc="#D4A030">Deporte</button>
+  <div class="fsep"></div>
+  <span class="flbl">Estado</span>
+  <button class="fbtn on" data-stat="all">Todos</button>
+  <button class="fbtn" data-stat="LINHA">Línea</button>
+  <button class="fbtn" data-stat="LANÇAMENTO">Lanzamiento</button>
+</div>
+
+<div class="wrap"><div class="grid" id="grid"></div></div>
+
+<div class="ov" id="ov">
+  <div class="mbox">
+    <button class="mcls" id="mcls">✕</button>
+    <div class="mtop">
+      <div class="mhdr" id="mhdr">
+        <div class="cph">🧸</div>
+      </div>
+      <div class="mside">
+        <div class="fttl">📋 Ficha Técnica</div>
+        <div class="ficha" id="ficha" style="display:none">
+          <div class="fg" id="fg"></div>
+        </div>
+        <div class="fload" id="fload" style="display:none">
+          <div class="cspin"></div><span>Cargando ficha técnica...</span>
+        </div>
+        <div class="fnone" id="fnone" style="display:none">Información no disponible</div>
+      </div>
+    </div>
+    <div class="mbody">
+      <div class="mref" id="mref"></div>
+      <div class="mtags">
+        <span class="mv" id="mv"></span>
+        <span class="ms" id="ms2"></span>
+      </div>
+      <div class="mname" id="mn"></div>
+      <div class="minfo">
+        <div class="sb" id="mst"></div>
+        <span class="morig" id="mor"></span>
+        <a class="mlink" id="mlnk" href="#" target="_blank" rel="noopener">🔗 Ver en el sitio</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="bktop" id="bktop">↑</button>
+
+<script>
+const PRODUCTS = [
+  {ref:"20509",nome:"JUGANDO DE INGENIERO - 20 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/20/2050-9-brincando-de-engenheiro-20-pcs/",img:"",slug:"2050-9-brincando-de-engenheiro-20-pcs"},
+  {ref:"52754",nome:"JUGANDO DE INGENIERO N1 - 42 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-de-engenheiro-i/",img:"",slug:"brincando-de-engenheiro-i"},
+  {ref:"52765",nome:"JUGANDO DE INGENIERO N2 - 53 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-de-engenheiro-ii/",img:"",slug:"brincando-de-engenheiro-ii"},
+  {ref:"52776",nome:"JUGANDO DE INGENIERO N3 - 73 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-de-engenheiro-iii/",img:"",slug:"brincando-de-engenheiro-iii"},
+  {ref:"52798",nome:"JUGANDO DE INGENIERO N4 - 120 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-de-engenheiro-120-pecas/",img:"",slug:"brincando-de-engenheiro-120-pecas"},
+  {ref:"53054",nome:"JUGANDO DE INGENIERO N5 - 150 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-de-engenheiro-150-pecas/",img:"",slug:"brincando-de-engenheiro-150-pecas"},
+  {ref:"53065",nome:"JUGANDO DE INGENIERO N6 - 200 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-de-engenheiro-200-pecas/",img:"",slug:"brincando-de-engenheiro-200-pecas"},
+  {ref:"67854",nome:"JUGANDO DE INGENIERO N7 - 300 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/01/23/brincando-de-engenheiro-no-7/",img:"https://produtosxalingo.oneweb.com.br/wp-content/uploads/2024/01/6785.4-Brincando-de-Engenheiro-No-07-300-pecas.png",slug:"brincando-de-engenheiro-no-7"},
+  {ref:"67865",nome:"JUGANDO DE INGENIERO N8 - 500 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/01/23/brincando-de-engenheiro-no8/",img:"https://produtosxalingo.oneweb.com.br/wp-content/uploads/2024/01/6786.5-Brincando-de-Engenheiro-No-08-500-pecas.png",slug:"brincando-de-engenheiro-no8"},
+  {ref:"67876",nome:"JUGANDO DE INGENIERO N9 - 1000 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/01/23/brincando-de-engenheiro-no9/",img:"https://produtosxalingo.oneweb.com.br/wp-content/uploads/2024/01/67876-BRINCANDO-DE-ENGENHEIRO-N9-1000PCS.png",slug:"brincando-de-engenheiro-no9"},
+  {ref:"20165",nome:"JUGANDO DE INGENIERO 70 A\u00d1OS - 70 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/27/brincando-de-engenheiro-70-anos-70-pcs/",img:"",slug:"brincando-de-engenheiro-70-anos-70-pcs"},
+  {ref:"14565",nome:"JUGANDO DE INGENIERO TREN - 53 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/02/14/brincando-de-engenheiro-trem/",img:"",slug:"brincando-de-engenheiro-trem"},
+  {ref:"52773",nome:"JUGANDO DE INGENIERO CIRCUITO DE CARRERAS - 70 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-de-engenheiro-circuito-de-corrida/",img:"",slug:"brincando-de-engenheiro-circuito-de-corrida"},
+  {ref:"67887",nome:"JUGANDO DE INGENIERO PAINT - 50 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/01/23/brincando-de-engenheiro-paint/",img:"https://produtosxalingo.oneweb.com.br/wp-content/uploads/2024/01/6788.7-Brincando-de-Engenheiro-Paint.png",slug:"brincando-de-engenheiro-paint"},
+  {ref:"11298",nome:"JUGANDO DE INGENIERO NUEVA YORK - 52 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/01/27/brincando-de-engenheiro-nova-iorque/",img:"",slug:"brincando-de-engenheiro-nova-iorque"},
+  {ref:"53321",nome:"TORRE DEL INGENIERO - 54 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/torre-do-engenheiro/",img:"https://produtosxalingo.oneweb.com.br/wp-content/uploads/2023/01/5332.1-Torre-do-Engenheiro.jpg",slug:"torre-do-engenheiro"},
+  {ref:"13487",nome:"JUGANDO DE INGENIERO HALLOWEEN - 60 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/01/27/brincando-de-engenheiro-halloween/",img:"",slug:"brincando-de-engenheiro-halloween"},
+  {ref:"13476",nome:"JUGANDO DE INGENIERO NAVIDAD - 60 PZS",vert:"BLOCOS DE MONTAR",vert_es:"BLOQUES DE CONSTRUCCI\u00d3N",sub:"BRINCANDO DE ENGENHEIRO",sub_es:"JUGANDO DE INGENIERO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/02/13/brincando-de-engenheiro-natal/",img:"",slug:"brincando-de-engenheiro-natal"},
+  {ref:"11643",nome:"JUGANDO DE INGENIERO DESAF\u00cdO DE LOS BLOCOS - 15 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/01/27/brincando-de-engenheiro-desafio-dos-blocos/",img:"",slug:"brincando-de-engenheiro-desafio-dos-blocos"},
+  {ref:"12310",nome:"COMUNICACI\u00d3N ALTERNATIVA - 127 PALABRAS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/01/28/comunicacao-alternativa/",img:"",slug:"comunicacao-alternativa"},
+  {ref:"12321",nome:"ENHEBRADO - 6 FIGURAS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/01/28/alinhavos/",img:"",slug:"alinhavos"},
+  {ref:"15343",nome:"CASITA INTERACTIVA FOFOSSAUROS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/01/27/casinha-interativa-fofossauros/",img:"",slug:"casinha-interativa-fofossauros"},
+  {ref:"17698",nome:"SEPARACI\u00d3N DE COLORES",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/separando-cores-e-montando/",img:"",slug:"separando-cores-e-montando"},
+  {ref:"17621",nome:"ROMPECABEZAS DE EXPRESIONES II - 25 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/quebra-cabeca-de-encaixe-expressoes-2/",img:"",slug:"quebra-cabeca-de-encaixe-expressoes-2"},
+  {ref:"17654",nome:"MEMORIA SOMBRAS Y FORMAS II - 32 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/jogo-da-memoria-sombras-e-formas/",img:"",slug:"jogo-da-memoria-sombras-e-formas"},
+  {ref:"17687",nome:"SECUENCIA L\u00d3GICA DE LAS FORMAS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/sequencia-logica-das-formas/",img:"",slug:"sequencia-logica-das-formas"},
+  {ref:"17676",nome:"PANEL DE ACTIVIDADES II",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/painel-de-atividades-2/",img:"",slug:"painel-de-atividades-2"},
+  {ref:"17665",nome:"CUADRO PARA COLOREAR PIXEL ART 2 - C/6 MARCADORES",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/quadro-de-colorir-pixel-art/",img:"",slug:"quadro-de-colorir-pixel-art"},
+  {ref:"17643",nome:"ABC FORMANDO PALABRAS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/abc-montando-palavras-2/",img:"",slug:"abc-montando-palavras-2"},
+  {ref:"17632",nome:"APRENDIENDO LAS HORAS Y LAS CANTIDADES",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/26/aprendendo-as-horas-e-quantidades-2/",img:"",slug:"aprendendo-as-horas-e-quantidades-2"},
+  {ref:"12776",nome:"JUGANDO DE MATEM\u00c1TICAS APRENDIENDO BRAILLE",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/27/brincando-de-matematica-braille/",img:"",slug:"brincando-de-matematica-braille"},
+  {ref:"12787",nome:"TRES EN RAYA T\u00c1CTIL APRENDIENDO BRAILLE",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/27/jogo-da-velha-tatil-braille/",img:"",slug:"jogo-da-velha-tatil-braille"},
+  {ref:"17587",nome:"ROMPECABEZAS APRENDIENDO EL ALFABETO EN LIBRAS - 52 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DESENVOLVIMENTO",sub_es:"DESARROLLO",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/02/03/quebra-cabecas-aprendendo-o-alfabeto-em-libras/",img:"",slug:"quebra-cabecas-aprendendo-o-alfabeto-em-libras"},
+  {ref:"20221",nome:"STEAM DESAF\u00cdO PIZZAIOLO",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"STEAM",sub_es:"STEAM",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/02/03/quebra-cabecas-aprendendo-o-alfabeto-em-libras/",img:"",slug:"quebra-cabecas-aprendendo-o-alfabeto-em-libras"},
+  {ref:"53309",nome:"STEAM INTERACTIVE PLAY ROMPECABEZAS CUERPO HUMANO - 100 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"STEAM",sub_es:"STEAM",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/quebra-cabeca-interactive-play-conhecendo-corpo-humano/",img:"",slug:"quebra-cabeca-interactive-play-conhecendo-corpo-humano"},
+  {ref:"53265",nome:"STEAM INTERACTIVE PLAY ROMPECABEZAS LOS PLANETAS - 100 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"STEAM",sub_es:"STEAM",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/quebra-cabeca-interactive-play-conhecendo-os-planetas/",img:"",slug:"quebra-cabeca-interactive-play-conhecendo-os-planetas"},
+  {ref:"20232",nome:"PLAYSET PISANDO FUNDO",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"PLAYSET",sub_es:"PLAYSET",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/18/playset-pisando-fundo/",img:"",slug:"playset-pisando-fundo"},
+  {ref:"67832",nome:"DIY PLAYSET CASITA PARA PINTURA 3D II",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"PLAYSET",sub_es:"PLAYSET",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/01/17/playset-casinha-para-colorir-3d/",img:"",slug:"playset-casinha-para-colorir-3d"},
+  {ref:"67843",nome:"DIY PLAYSET CARRITO PARA PINTURA 3D II",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"PLAYSET",sub_es:"PLAYSET",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/01/15/playset-carrinho-para-pintura-3-d-ii/",img:"",slug:"playset-carrinho-para-pintura-3-d-ii"},
+  {ref:"20243",nome:"PIZARRA Y MARCADORES",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUADROS PARA COLORIR",sub_es:"CUADROS PARA COLOREAR",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/19/12047/",img:"",slug:"12047"},
+  {ref:"12976",nome:"CUADRO INFANTIL COHETE ESPACIAL - C/6 MARCADORES",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUADROS PARA COLORIR",sub_es:"CUADROS PARA COLOREAR",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/27/quadro-infantil-foguete-espacial/",img:"",slug:"quadro-infantil-foguete-espacial"},
+  {ref:"53221",nome:"CUADRO INFANTIL UNICORNIO - C/6 MARCADORES",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUADROS PARA COLORIR",sub_es:"CUADROS PARA COLOREAR",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/quadro-branco-infantil-unicornio/",img:"",slug:"quadro-branco-infantil-unicornio"},
+  {ref:"20510",nome:"ROMPECABEZAS VALLE DE LOS DINOSAURIOS - 15 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/27/2051-0-quebra-cabeca-pullpack/",img:"",slug:"2051-0-quebra-cabeca-pullpack"},
+  {ref:"20310",nome:"ROMPECABEZAS EXPLORADORES DEL MUNDO - 33 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/20/quebra-cabeca-exploradores-do-mundo-33-pcs/",img:"",slug:"quebra-cabeca-exploradores-do-mundo-33-pcs"},
+  {ref:"20287",nome:"ROMPECABEZAS FAUNA BRASILE\u00d1A - DISPLAY 12 UN",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/20/quebra-cabeca-fauna-brasileira-display-12-unid-3pcs/",img:"",slug:"quebra-cabeca-fauna-brasileira-display-12-unid-3pcs"},
+  {ref:"20298",nome:"ROMPECABEZAS VIAJE ESPACIAL - DISPLAY 12 UN",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/20/quebra-cabeca-viagem-espacial-display-12-unid-3-4-pcs/",img:"",slug:"quebra-cabeca-viagem-espacial-display-12-unid-3-4-pcs"},
+  {ref:"20543",nome:"ROMPECABEZAS LA PRINCESA Y EL DRAG\u00d3N - 30 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/11/quebra-cabeca-a-princesa-e-o-dragao/",img:"",slug:"quebra-cabeca-a-princesa-e-o-dragao"},
+  {ref:"20554",nome:"ROMPECABEZAS LAGO DE LAS HADAS - 60 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/11/quebra-cabeca-lago-das-fadas/",img:"",slug:"quebra-cabeca-lago-das-fadas"},
+  {ref:"20576",nome:"ROMPECABEZAS JARD\u00cdN DE LAS PRINCESAS - 60 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/24/quebra-cabeca-jardim-das-princesas-60-pcs/",img:"",slug:"quebra-cabeca-jardim-das-princesas-60-pcs"},
+  {ref:"20587",nome:"ROMPECABEZAS GUARDI\u00c1N PLASMA - 60 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/24/quebra-cabeca-guardiao-plasma-60-pcs-2/",img:"",slug:"quebra-cabeca-guardiao-plasma-60-pcs-2"},
+  {ref:"20565",nome:"ROMPECABEZAS PISANDO FUNDO - 60 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/11/quebra-cabeca-pisando-fundo-60-pcs/",img:"",slug:"quebra-cabeca-pisando-fundo-60-pcs"},
+  {ref:"20598",nome:"ROMPECABEZAS PISANDO FUNDO 2X100 - 200 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/11/quebra-cabeca-pisando-fundo-2x100-200-pcs/",img:"",slug:"quebra-cabeca-pisando-fundo-2x100-200-pcs"},
+  {ref:"17809",nome:"ROMPECABEZAS AEIOU - 20 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/27/quebra-cabeca-aeiou/",img:"",slug:"quebra-cabeca-aeiou"},
+  {ref:"17798",nome:"ROMPECABEZAS N\u00daMEROS - 30 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/27/quebra-cabeca-numeros/",img:"",slug:"quebra-cabeca-numeros"},
+  {ref:"54265",nome:"ROMPECABEZAS BIG FOFOSSAUROS - 35 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/quebra-cabeca-big-fofossauros/",img:"",slug:"quebra-cabeca-big-fofossauros"},
+  {ref:"67976",nome:"ROMPECABEZAS HARRY POTTER 4X100 - 400 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"QUEBRA-CABE\u00c7AS",sub_es:"ROMPECABEZAS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/27/quebra-cabeca-harry-potter-400-pecas/",img:"",slug:"quebra-cabeca-harry-potter-400-pecas"},
+  {ref:"20521",nome:"MEMORIA ANIMALITOS DE LA GRANJA - 20 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/27/memoria-pullpack/",img:"",slug:"memoria-pullpack"},
+  {ref:"20387",nome:"MEMORIA PISANDO FUNDO - 24 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/19/memoria-pisando-fundo-24-pcs/",img:"",slug:"memoria-pisando-fundo-24-pcs"},
+  {ref:"20376",nome:"MEMORIA ENSALADA DE FRUTAS - 24 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/20/memoria-salada-frutas-24-pcs/",img:"",slug:"memoria-salada-frutas-24-pcs"},
+  {ref:"50765",nome:"MEMORIA ANIMALES - 24 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogo-da-memoria-animais/",img:"",slug:"jogo-da-memoria-animais"},
+  {ref:"17376",nome:"MEMORIA DE LAS AVES - 24 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogo-da-memoria-aves-passatempo/",img:"",slug:"jogo-da-memoria-aves-passatempo"},
+  {ref:"10554",nome:"MEMORIA TURMA DA M\u00d4NICA - 24 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogo-da-memoria-turma-da-monica/",img:"",slug:"jogo-da-memoria-turma-da-monica"},
+  {ref:"20532",nome:"DOMIN\u00d3 DE LOS N\u00daMEROS - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/27/domino-pullpack/",img:"",slug:"domino-pullpack"},
+  {ref:"20421",nome:"DOMIN\u00d3 ANIMALES CON LETRAS - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"MEM\u00d3RIA",sub_es:"MEMORIA",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/20/domino-animais-com-letras-28-pcs/",img:"",slug:"domino-animais-com-letras-28-pcs"},
+  {ref:"20409",nome:"DOMIN\u00d3 ADICI\u00d3N Y SUSTRACCI\u00d3N - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DOMIN\u00d3S",sub_es:"DOMIN\u00d3S",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/20/domino-adicao-e-subtracao-28-pcs/",img:"",slug:"domino-adicao-e-subtracao-28-pcs"},
+  {ref:"20410",nome:"DOMIN\u00d3 MULTIPLICACI\u00d3N Y DIVISI\u00d3N - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DOMIN\u00d3S",sub_es:"DOMIN\u00d3S",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/20/domino-multiplicacao-e-divisao-28-pcs/",img:"",slug:"domino-multiplicacao-e-divisao-28-pcs"},
+  {ref:"10543",nome:"DOMIN\u00d3 TURMA DA M\u00d4NICA - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DOMIN\u00d3S",sub_es:"DOMIN\u00d3S",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/domino-turma-da-monica/",img:"",slug:"domino-turma-da-monica"},
+  {ref:"53021",nome:"DOMIN\u00d3 DE MADERA PUNTOS COLORIDOS - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DOMIN\u00d3S",sub_es:"DOMIN\u00d3S",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/domino-de-madeira-pingos-color/",img:"",slug:"domino-de-madeira-pingos-color"},
+  {ref:"53032",nome:"DOMIN\u00d3 PUNTOS COLORIDOS - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DOMIN\u00d3S",sub_es:"DOMIN\u00d3S",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/domino-de-madeira-pingos-color-2/",img:"",slug:"domino-de-madeira-pingos-color-2"},
+  {ref:"51587",nome:"DOMIN\u00d3 JUEGOS TRADICIONALES EN MADERA - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"DOMIN\u00d3S",sub_es:"DOMIN\u00d3S",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogos-tradicionais-em-madeira-domino/",img:"",slug:"jogos-tradicionais-em-madeira-domino"},
+  {ref:"15298",nome:"BLOQUES PEDAG\u00d3GICOS FRUTITAS - 32 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"BLOCOS PEDAG\u00d3GICOS",sub_es:"BLOQUES PEDAG\u00d3GICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/02/12/blocos-pedagogicos-frutinhas/",img:"",slug:"blocos-pedagogicos-frutinhas"},
+  {ref:"15287",nome:"BLOQUES PEDAG\u00d3GICOS FONDO DEL MAR - 32 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"BLOCOS PEDAG\u00d3GICOS",sub_es:"BLOQUES PEDAG\u00d3GICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/02/12/blocos-pedagogicos-fundo-do-mar/",img:"",slug:"blocos-pedagogicos-fundo-do-mar"},
+  {ref:"52821",nome:"MULTIBLOCKS COLORIDOS - 50 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"BLOCOS PEDAG\u00d3GICOS",sub_es:"BLOQUES PEDAG\u00d3GICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/multiblocks-colorido-50-pecas/",img:"",slug:"multiblocks-colorido-50-pecas"},
+  {ref:"52832",nome:"MULTIBLOCKS MIX - 50 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"BLOCOS PEDAG\u00d3GICOS",sub_es:"BLOQUES PEDAG\u00d3GICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/multiblocks-mix-50-pecas/",img:"",slug:"multiblocks-mix-50-pecas"},
+  {ref:"52698",nome:"JUGANDO CON LETRAS MAY\u00daSCULAS - 36 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"EDUCATIVOS",sub_es:"EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-com-letras-maiusculas/",img:"",slug:"brincando-com-letras-maiusculas"},
+  {ref:"52665",nome:"ABC - MAY\u00daSCULAS Y MIN\u00daSCULAS - 72 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"EDUCATIVOS",sub_es:"EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/abc-maiusculas-e-minusculas-com-72-pecas/",img:"",slug:"abc-maiusculas-e-minusculas-com-72-pecas"},
+  {ref:"52643",nome:"ABCD + MAY\u00daSCULAS Y MIN\u00daSCULAS - 144 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"EDUCATIVOS",sub_es:"EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/abcd-maiusculas-e-minusculas-144-pecas/",img:"",slug:"abcd-maiusculas-e-minusculas-144-pecas"},
+  {ref:"50576",nome:"JUGANDO CON LETRAS Y N\u00daMEROS - 72 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"EDUCATIVOS",sub_es:"EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/brincando-com-letras-e-numeros/",img:"",slug:"brincando-com-letras-e-numeros"},
+  {ref:"10576",nome:"ASOCIANDO N\u00daMEROS A CANTIDADES TURMA DA M\u00d4NICA - 20 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"EDUCATIVOS",sub_es:"EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/associando-numeros-a-quantidades-turma-da-monica/",img:"",slug:"associando-numeros-a-quantidades-turma-da-monica"},
+  {ref:"12843",nome:"APRENDIENDO INGL\u00c9S MEMORIA DE LOS COLORES - 32 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"EDUCATIVOS",sub_es:"EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/26/aprendendo-ingles-memoria-das-cores/",img:"",slug:"aprendendo-ingles-memoria-das-cores"},
+  {ref:"67809",nome:"TORRE EN RIESGO: DESAF\u00cdO DE CARTAS - 50 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"JOGOS EDUCATIVOS",sub_es:"JUEGOS EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/02/16/torre-em-risco-desafio-das-cartas/",img:"",slug:"torre-em-risco-desafio-das-cartas"},
+  {ref:"60254",nome:"PALABRAS CRUZADAS - 120 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"JOGOS EDUCATIVOS",sub_es:"JUEGOS EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/palavras-cruzadas/",img:"",slug:"palavras-cruzadas"},
+  {ref:"4421",nome:"TANGRAM - 28 PZS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"JOGOS EDUCATIVOS",sub_es:"JUEGOS EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/tangram/",img:"",slug:"tangram"},
+  {ref:"12965",nome:"GOLPEA PINOS",vert:"EDUCATIVOS",vert_es:"EDUCATIVOS",sub:"JOGOS EDUCATIVOS",sub_es:"JUEGOS EDUCATIVOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/26/bate-pinos/",img:"",slug:"bate-pinos"},
+  {ref:"60009",nome:"AJEDREZ OFICIAL",vert:"JOGOS",vert_es:"JUEGOS",sub:"XADREZ",sub_es:"AJEDREZ",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/xadrez-oficial/",img:"",slug:"xadrez-oficial"},
+  {ref:"60065",nome:"AJEDREZ Y DAMAS",vert:"JOGOS",vert_es:"JUEGOS",sub:"XADREZ",sub_es:"AJEDREZ",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/xadrez-e-damas-estojo-e-pecas-em-madeira/",img:"",slug:"xadrez-e-damas-estojo-e-pecas-em-madeira"},
+  {ref:"60010",nome:"AJEDREZ ESCOLAR",vert:"JOGOS",vert_es:"JUEGOS",sub:"XADREZ",sub_es:"AJEDREZ",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/xadrez-escolar/",img:"",slug:"xadrez-escolar"},
+  {ref:"60087",nome:"AJEDREZ ESCOLAR JUEGOS TRADICIONALES EN MADERA",vert:"JOGOS",vert_es:"JUEGOS",sub:"XADREZ",sub_es:"AJEDREZ",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogos-tradicionais-em-madeira-xadrez-escolar/",img:"",slug:"jogos-tradicionais-em-madeira-xadrez-escolar"},
+  {ref:"7821",nome:"AJEDREZ ESCOLAR PL\u00c1STICO",vert:"JOGOS",vert_es:"JUEGOS",sub:"XADREZ",sub_es:"AJEDREZ",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/xadrez-escolar-plastico/",img:"",slug:"xadrez-escolar-plastico"},
+  {ref:"20498",nome:"\u00a1ADIVINA PRIMERO!",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/03/11/adivinha-primeiro/",img:"",slug:"adivinha-primeiro"},
+  {ref:"7098",nome:"PALITOS CHINOS",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/pega-varetas/",img:"",slug:"pega-varetas"},
+  {ref:"54709",nome:"LUDO TRIDIMENSIONAL",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/25/ludo-tridimensional/",img:"",slug:"ludo-tridimensional"},
+  {ref:"65598",nome:"JUEGO 5 EN 1",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogos-5-x-1/",img:"",slug:"jogos-5-x-1"},
+  {ref:"65576",nome:"JUEGO 4 EN 1",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogo-4x1/",img:"",slug:"jogo-4x1"},
+  {ref:"65587",nome:"18 JUEGOS",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/18-jogos/",img:"",slug:"18-jogos"},
+  {ref:"60210",nome:"DAMAS Y LUDO",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/damas-e-ludo/",img:"",slug:"damas-e-ludo"},
+  {ref:"60198",nome:"DAMAS Y CAMINO",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/damas-e-trilha/",img:"",slug:"damas-e-trilha"},
+  {ref:"65543",nome:"LUDO",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogos-tradicionais-em-madeira-ludo/",img:"",slug:"jogos-tradicionais-em-madeira-ludo"},
+  {ref:"65554",nome:"DAMAS",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogos-tradicionais-em-madeira-damas/",img:"",slug:"jogos-tradicionais-em-madeira-damas"},
+  {ref:"52909",nome:"BINGO EN MADERA",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/bingo-pedras-de-madeira/",img:"",slug:"bingo-pedras-de-madeira"},
+  {ref:"52943",nome:"LOTO - 48 CARTONES",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/loto-48-cartoes/",img:"",slug:"loto-48-cartoes"},
+  {ref:"7043",nome:"RESTA UNO",vert:"JOGOS",vert_es:"JUEGOS",sub:"JOGOS CL\u00c1SSICOS",sub_es:"JUEGOS CL\u00c1SICOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogo-resta-um/",img:"",slug:"jogo-resta-um"},
+  {ref:"60598",nome:"JUEGO DE TABLERO CORRE PIRATA",vert:"JOGOS",vert_es:"JUEGOS",sub:"BOARDGAMES",sub_es:"BOARDGAMES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/27/jogo-de-tabuleiro-corre-pirata/",img:"",slug:"jogo-de-tabuleiro-corre-pirata"},
+  {ref:"60576",nome:"JUEGO DE TABLERO PANGEA",vert:"JOGOS",vert_es:"JUEGOS",sub:"BOARDGAMES",sub_es:"BOARDGAMES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/27/jogo-de-tabuleiro-pangeia/",img:"",slug:"jogo-de-tabuleiro-pangeia"},
+  {ref:"12732",nome:"JUEGO DE TABLERO CAMPOS DE LA FORTUNA",vert:"JOGOS",vert_es:"JUEGOS",sub:"BOARDGAMES",sub_es:"BOARDGAMES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/02/05/jogo-de-tabuleiro-campos-da-fortuna/",img:"",slug:"jogo-de-tabuleiro-campos-da-fortuna"},
+  {ref:"12810",nome:"JUEGO DE TABLERO PISANDO FUNDO",vert:"JOGOS",vert_es:"JUEGOS",sub:"BOARDGAMES",sub_es:"BOARDGAMES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/02/05/jogo-de-tabueliro-pisando-fundo/",img:"",slug:"jogo-de-tabueliro-pisando-fundo"},
+  {ref:"60565",nome:"JUEGO DE TABLERO XALING\u00d3POLIS",vert:"JOGOS",vert_es:"JUEGOS",sub:"BOARDGAMES",sub_es:"BOARDGAMES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/06/27/jogo-de-tabuleiro-xalingopolis/",img:"",slug:"jogo-de-tabuleiro-xalingopolis"},
+  {ref:"12954",nome:"REFRIGERADOR PETIT CHEF",vert:"FAZ DE CONTA",vert_es:"JUEGO SIMB\u00d3LICO",sub:"REFRIGERADORES",sub_es:"REFRIGERADORES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/27/refrigerador-petit-chef/",img:"",slug:"refrigerador-petit-chef"},
+  {ref:"6419",nome:"COCINA PETIT CHEF",vert:"FAZ DE CONTA",vert_es:"JUEGO SIMB\u00d3LICO",sub:"COZINHAS",sub_es:"COCINAS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/cozinha-petit-chef/",img:"",slug:"cozinha-petit-chef"},
+  {ref:"2921",nome:"SHOW DE MAGIA - 8 TRUCOS",vert:"FAZ DE CONTA",vert_es:"JUEGO SIMB\u00d3LICO",sub:"M\u00c1GICAS",sub_es:"MAGIA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/show-de-magica/",img:"",slug:"show-de-magica"},
+  {ref:"7249",nome:"TRICICLO 3 EN 1 PINK PET",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS TOP",sub_es:"TRICICLOS TOP",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/02/01/triciclo-3x1-pink-pet/",img:"",slug:"triciclo-3x1-pink-pet"},
+  {ref:"7248",nome:"TRICICLO 3 EN 1 BLUE RACE",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS TOP",sub_es:"TRICICLOS TOP",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/02/01/triciclo-3x1-blue-race/",img:"",slug:"triciclo-3x1-blue-race"},
+  {ref:"7523",nome:"TRICICLO SUPER TURBO AZUL",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS INTERMEDI\u00c1RIOS",sub_es:"TRICICLOS INTERMEDIOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/triciclo-infantil-super-turbo-azul/",img:"",slug:"triciclo-infantil-super-turbo-azul"},
+  {ref:"7524",nome:"TRICICLO SUPER TURBO ROSA",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS INTERMEDI\u00c1RIOS",sub_es:"TRICICLOS INTERMEDIOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/triciclo-infantil-super-turbo-rosa/",img:"",slug:"triciclo-infantil-super-turbo-rosa"},
+  {ref:"10909",nome:"TRICICLO ABEJITA - C/ EMPUJADOR, PROTECCI\u00d3N Y CESTA",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS INTERMEDI\u00c1RIOS",sub_es:"TRICICLOS INTERMEDIOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/02/06/triciclo-abelhinha-com-empurrador-protecao-e-cestinha/",img:"",slug:"triciclo-abelhinha-com-empurrador-protecao-e-cestinha"},
+  {ref:"10899",nome:"TRICICLO ROBOT - C/ EMPUJADOR, PROTECCI\u00d3N Y CESTA",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS INTERMEDI\u00c1RIOS",sub_es:"TRICICLOS INTERMEDIOS",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/12/27/triciclo-robot-com-empurrador-protecao-e-cestinha/",img:"",slug:"triciclo-robot-com-empurrador-protecao-e-cestinha"},
+  {ref:"7665",nome:"TRICICLO FOFETE - C/ CESTA",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/triciclo-infantil-fofete-com-cestinha/",img:"",slug:"triciclo-infantil-fofete-com-cestinha"},
+  {ref:"7252",nome:"TRICICLO DEPORTES - C/ CESTA",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/02/01/triciclo-esportes-com-cestinha/",img:"",slug:"triciclo-esportes-com-cestinha"},
+  {ref:"16343",nome:"TRICICLO ZIPPY CAR",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/02/04/triciclo-zippy-car/",img:"",slug:"triciclo-zippy-car"},
+  {ref:"16354",nome:"TRICICLO BLOOM FLOWER",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2025/02/04/triciclo-bloom-flower/",img:"",slug:"triciclo-bloom-flower"},
+  {ref:"7321",nome:"TRICICLO MARIQUITA",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/triciclo-infantil-joaninha/",img:"",slug:"triciclo-infantil-joaninha"},
+  {ref:"7621",nome:"TRICICLO TIGRE",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/triciclo-infantil-tigrao/",img:"",slug:"triciclo-infantil-tigrao"},
+  {ref:"7675",nome:"TRICICLO BABY RACER - C/ EMPUJADOR",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2024/01/19/triciclo-baby-racer-com-empurrador/",img:"",slug:"triciclo-baby-racer-com-empurrador"},
+  {ref:"7754",nome:"TRICICLO CROCO RACER - S/ EMPUJADOR",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/triciclo-infantil-croco-racer/",img:"",slug:"triciclo-infantil-croco-racer"},
+  {ref:"7732",nome:"TRICICLO ONCINHA RACER - S/ EMPUJADOR",vert:"RODADOS",vert_es:"RUEDAS",sub:"TRICICLOS POPULARES",sub_es:"TRICICLOS POPULARES",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/triciclo-oncinha-racer/",img:"",slug:"triciclo-oncinha-racer"},
+  {ref:"20432",nome:"CANASTA DE B\u00c1SQUETBOL PLAY",vert:"ESPORTE",vert_es:"DEPORTE",sub:"BASQUETE",sub_es:"B\u00c1SQUETBOL",status:"LAN\u00c7AMENTO",status_es:"LANZAMIENTO",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2026/02/19/tabela-de-basquete-play/",img:"",slug:"tabela-de-basquete-play"},
+  {ref:"67032",nome:"CANASTA DE B\u00c1SQUETBOL",vert:"ESPORTE",vert_es:"DEPORTE",sub:"BASQUETE",sub_es:"B\u00c1SQUETBOL",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/tabela-de-basquete/",img:"",slug:"tabela-de-basquete"},
+  {ref:"7209",nome:"JUEGO DE BOTONES BRASILEIR\u00c3O",vert:"ESPORTE",vert_es:"DEPORTE",sub:"FUTEBOL DE MESA",sub_es:"FUTBOL DE MESA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/jogo-de-botoes-brasileirao/",img:"",slug:"jogo-de-botoes-brasileirao"},
+  {ref:"67109",nome:"MESA PARA JUEGO DE BOTONES CON MARCADOR",vert:"ESPORTE",vert_es:"DEPORTE",sub:"FUTEBOL DE MESA",sub_es:"FUTBOL DE MESA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/mesa-para-jogo-de-botao-com-marcador/",img:"",slug:"mesa-para-jogo-de-botao-com-marcador"},
+  {ref:"67354",nome:"FUTBOL\u00cdN SUPER COPA",vert:"ESPORTE",vert_es:"DEPORTE",sub:"FUTEBOL DE MESA",sub_es:"FUTBOL DE MESA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/pebolim-super-copa/",img:"",slug:"pebolim-super-copa"},
+  {ref:"54509",nome:"CONJUNTO TENIS DE MESA",vert:"ESPORTE",vert_es:"DEPORTE",sub:"T\u00caNIS DE MESA",sub_es:"TENIS DE MESA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/conjunto-tenis-de-mesa/",img:"",slug:"conjunto-tenis-de-mesa"},
+  {ref:"67287",nome:"MESA PLEGABLE DE MADERA CON PIES",vert:"ESPORTE",vert_es:"DEPORTE",sub:"T\u00caNIS DE MESA",sub_es:"TENIS DE MESA",status:"LINHA",status_es:"L\u00cdNEA",origem:"NACIONAL",link:"https://produtosxalingo.oneweb.com.br/2023/01/20/mesa-tenis-de-mesa-dobravel-madeira-com-pes/",img:"",slug:"mesa-tenis-de-mesa-dobravel-madeira-com-pes"}
+];
+
+// State
+var vw='grid', vF='all', sF='all';
+
+// ── Filters ───────────────────────────────────────────────
+document.querySelectorAll('[data-vert]').forEach(function(b){
+  var vc = b.getAttribute('data-vc');
+  // Hover: use vertical color instead of generic accent
+  if(vc){
+    b.addEventListener('mouseenter', function(){
+      if(!b.classList.contains('on')){ b.style.borderColor=vc; b.style.color=vc; }
+    });
+    b.addEventListener('mouseleave', function(){
+      if(!b.classList.contains('on')){ b.style.borderColor=''; b.style.color=''; }
+    });
+  }
+  b.addEventListener('click', function(){
+    // Reset all vert buttons
+    document.querySelectorAll('[data-vert]').forEach(function(x){
+      x.classList.remove('on');
+      x.style.removeProperty('--fbtn-vc');
+      x.style.removeProperty('border-color');
+      x.style.removeProperty('color');
+    });
+    b.classList.add('on');
+    if(vc) b.style.setProperty('--fbtn-vc', vc);
+    vF = b.getAttribute('data-vert');
+    render();
+  });
+});
+document.querySelectorAll('[data-stat]').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('[data-stat]').forEach(function(x){x.classList.remove('on')});
+    b.classList.add('on');
+    sF = b.getAttribute('data-stat');
+    render();
+  });
+});
+
+// View toggle
+document.getElementById('vg').addEventListener('click', function(){
+  vw='grid';
+  document.getElementById('vg').classList.add('on');
+  document.getElementById('vl').classList.remove('on');
+  render();
+});
+document.getElementById('vl').addEventListener('click', function(){
+  vw='list';
+  document.getElementById('vl').classList.add('on');
+  document.getElementById('vg').classList.remove('on');
+  render();
+});
+
+document.getElementById('q').addEventListener('input', render);
+document.getElementById('sort').addEventListener('change', render);
+document.getElementById('bktop').addEventListener('click', function(){ window.scrollTo({top:0,behavior:'smooth'}); });
+window.addEventListener('scroll', function(){ document.getElementById('bktop').classList.toggle('show', window.scrollY > 300); });
+
+// ── Render ────────────────────────────────────────────────
+var VERT_ORDER = ['BLOCOS DE MONTAR','EDUCATIVOS','JOGOS','FAZ DE CONTA','RODADOS','ESPORTE'];
+function vertIdx(v){ var i=VERT_ORDER.indexOf(v); return i>=0?i:99; }
+
+function render(){
+  var q = (document.getElementById('q').value||'').toLowerCase().trim();
+  var sort = document.getElementById('sort').value;
+  var list = PRODUCTS.filter(function(p){
+    if(q && !p.nome.toLowerCase().includes(q) && !p.ref.includes(q)) return false;
+    if(vF !== 'all' && p.vert !== vF) return false;
+    if(sF !== 'all' && p.status !== sF) return false;
+    return true;
+  });
+  list.sort(function(a,b){
+    if(sort==='az') return a.nome.localeCompare(b.nome,'es');
+    if(sort==='za') return b.nome.localeCompare(a.nome,'es');
+    if(sort==='ra') return +a.ref - +b.ref;
+    if(sort==='rd') return +b.ref - +a.ref;
+    if(sort==='lz') return (b.status==='LANÇAMENTO'?1:0)-(a.status==='LANÇAMENTO'?1:0);
+    // default: 'vert' — sort by vertical order, then by name within vertical
+    var vi = vertIdx(a.vert) - vertIdx(b.vert);
+    if(vi !== 0) return vi;
+    return a.nome.localeCompare(b.nome,'es');
+  });
+  var g = document.getElementById('grid');
+  g.className = vw==='list' ? 'grid lst' : 'grid';
+  g.innerHTML = list.length ? list.map(cardHTML).join('') : '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--soft)">Ningún producto encontrado</div>';
+  document.getElementById('cnt').textContent = list.length+' de '+PRODUCTS.length;
+  document.getElementById('sT').textContent = list.length;
+  document.getElementById('sL').textContent = list.filter(function(p){return p.status==='LANÇAMENTO';}).length;
+}
+
+function scls(s){ return s==='LANÇAMENTO'?'z':s==='BLACK TRADE'?'b':'l'; }
+function slbl(s){ return s==='LANÇAMENTO'?'🚀 Lanzamiento':s==='BLACK TRADE'?'⚫ Black Trade':'✓ Línea'; }
+
+var VCMAP = {
+  'BLOCOS DE MONTAR': '#7C6EB5',
+  'EDUCATIVOS':       '#6B87C7',
+  'JOGOS':            '#E06B55',
+  'FAZ DE CONTA':     '#3EBDAD',
+  'RODADOS':          '#5DB85A',
+  'ESPORTE':          '#D4A030'
+};
+function getVC(vert){ return VCMAP[vert] || '#1B3A5C'; }
+
+function cardHTML(p){
+  var vc = getVC(p.vert);
+  var img = p.img ? '<img src="'+p.img+'" alt="" loading="lazy">' : '<div class="cspin"></div>';
+  var ext = p.link ? '<a class="ext" href="'+p.link+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">↗</a>' : '';
+  var cls = scls(p.status);
+  var body = '<div class="cbody'+(vw==='list'?' style=\"flex:1\"':'')+'"><div class="cref">REF '+p.ref+'</div><div class="cname">'+p.nome+'</div><div class="csub">'+p.sub_es+'</div><div class="cfoot"><span class="sb '+cls+'"><span class="sd"></span>'+slbl(p.status)+'</span>'+ext+'</div></div>';
+  return '<div class="card" data-ref="'+p.ref+'" style="--vc:'+vc+';--vc-bg:'+vc+'22"><div class="cimg"><div class="ctag">'+p.vert_es+'</div>'+img+'</div>'+body+'</div>';
+}
+
+// ── Card click → modal ────────────────────────────────────
+document.getElementById('grid').addEventListener('click', function(e){
+  var card = e.target.closest('.card');
+  if(!card) return;
+  var ref = card.getAttribute('data-ref');
+  if(ref) openModal(ref);
+});
+
+// ── Modal ─────────────────────────────────────────────────
+function openModal(ref){
+  var p = null;
+  for(var i=0;i<PRODUCTS.length;i++){ if(PRODUCTS[i].ref===ref){p=PRODUCTS[i];break;} }
+  if(!p) return;
+
+  // Image (close button is now permanent on .mbox, not inside mhdr)
+  document.getElementById('mhdr').innerHTML =
+    (p.img ? '<img src="'+p.img+'" alt="">' : '<div class="cph">🧸</div>');
+
+  // Info
+  document.getElementById('mref').textContent = 'REF '+p.ref;
+  var mvEl = document.getElementById('mv');
+  mvEl.textContent = p.vert_es;
+  var vc = getVC(p.vert);
+  mvEl.style.background = vc+'22';
+  mvEl.style.color = vc;
+  document.getElementById('ms2').textContent = p.sub_es;
+  document.getElementById('mn').textContent = p.nome;
+
+  var st = document.getElementById('mst');
+  st.className = 'sb '+scls(p.status);
+  st.innerHTML = '<span class="sd"></span>'+slbl(p.status);
+  document.getElementById('mor').textContent = p.origem==='NACIONAL' ? '🇧🇷 Nacional' : '📦 Importado';
+
+  var ml = document.getElementById('mlnk');
+  if(p.link){ ml.href=p.link; ml.style.display='inline-flex'; }
+  else ml.style.display='none';
+
+  // Reset ficha state
+  document.getElementById('ficha').style.display='none';
+  document.getElementById('fload').style.display='none';
+  document.getElementById('fnone').style.display='none';
+
+  // Show modal
+  document.getElementById('ov').classList.add('open');
+  document.body.style.overflow='hidden';
+
+  // Ficha técnica - fetch from WordPress site
+  if(p.link && p.slug){
+    if(fichaC[p.slug] !== undefined){
+      showFicha(fichaC[p.slug]);
+    } else {
+      document.getElementById('fload').style.display='flex';
+      fetchFicha(p.slug).then(function(d){ showFicha(d); });
+    }
+  } else {
+    document.getElementById('fnone').style.display='flex';
+  }
+}
+
+function closeModal(){
+  document.getElementById('ov').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// Permanent close button listener (botão agora é fixo na .mbox, não é recriado)
+document.getElementById('mcls').addEventListener('click', closeModal);
+
+document.getElementById('ov').addEventListener('click', function(e){
+  if(e.target === document.getElementById('ov')) closeModal();
+});
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+// ── Ficha técnica ─────────────────────────────────────────
+var fichaC = {};
+var WP = 'https://produtosxalingo.oneweb.com.br';
+
+// Faz parse do HTML da ficha técnica - aceita <th> e <td>
+function parseFicha(html){
+  if(!html) return null;
+  var rows = {};
+  var trRe = /<tr[^>]*>([\s\S]*?)<\/tr>/gi, tm;
+  while((tm = trRe.exec(html)) !== null){
+    // Aceita células <td> OU <th> (a primeira linha da tabela WP costuma ser <th>)
+    var cellRe = /<(?:td|th)[^>]*>([\s\S]*?)<\/(?:td|th)>/gi, cm, cells=[];
+    while((cm = cellRe.exec(tm[1])) !== null){
+      var text = cm[1]
+        .replace(/<br\s*\/?>/gi,' ')
+        .replace(/<[^>]+>/g,'')
+        .replace(/&nbsp;/gi,' ')
+        .replace(/&amp;/gi,'&')
+        .replace(/&aacute;/gi,'á').replace(/&eacute;/gi,'é').replace(/&iacute;/gi,'í').replace(/&oacute;/gi,'ó').replace(/&uacute;/gi,'ú')
+        .replace(/&atilde;/gi,'ã').replace(/&otilde;/gi,'õ').replace(/&ccedil;/gi,'ç')
+        .replace(/\s+/g,' ')
+        .trim();
+      cells.push(text);
+    }
+    if(cells.length>=2 && cells[0] && cells[1]) rows[cells[0]]=cells[1];
+  }
+  return Object.keys(rows).length ? rows : null;
+}
+
+function fetchFicha(slug){
+  var apiUrl = WP+'/wp-json/wp/v2/posts?slug='+encodeURIComponent(slug)+'&_fields=content&per_page=1';
+
+  function tryUrl(url){
+    return fetch(url, {signal: AbortSignal.timeout(10000)})
+      .then(function(r){
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        return r.json();
+      })
+      .then(function(posts){
+        if(!posts || !posts.length){ throw new Error('Post não encontrado: '+slug); }
+        var html = (posts[0] && posts[0].content && posts[0].content.rendered) || '';
+        var data = parseFicha(html);
+        if(!data){ throw new Error('Tabela não encontrada no post: '+slug); }
+        return data;
+      });
+  }
+
+  // Tentativa 1: direto. Tentativa 2: via proxy CORS (caso file:// ou bloqueio)
+  return tryUrl(apiUrl)
+    .catch(function(err){
+      console.warn('[Ficha] direto falhou, tentando proxy CORS:', slug, err.message);
+      return tryUrl('https://corsproxy.io/?url='+encodeURIComponent(apiUrl));
+    })
+    .then(function(data){ fichaC[slug]=data; return data; })
+    .catch(function(err){
+      console.warn('[Ficha] sem dados para', slug, '-', err.message);
+      fichaC[slug]=null;
+      return null;
+    });
+}
+
+function showFicha(data){
+  document.getElementById('fload').style.display='none';
+  if(!data){
+    document.getElementById('ficha').style.display='none';
+    document.getElementById('fnone').style.display='flex';
+    return;
+  }
+  document.getElementById('fnone').style.display='none';
+  var fg = document.getElementById('fg');
+  fg.innerHTML='';
+  var MAP={'Código':'Código','Código de Barras':'Cód. Barras','Comprimento':'Largo (cm)','Largura':'Ancho (cm)','Altura':'Alto (cm)','Peso':'Peso'};
+  var ORDER=['Código','Código de Barras','Comprimento','Largura','Altura','Peso'];
+  var dims=['Comprimento','Largura','Altura'];
+  // só agrupa em "Dimensiones" se as 3 existem E pelo menos uma é diferente de 0
+  var hasDims = dims.every(function(k){return data[k];}) &&
+                dims.some(function(k){return parseFloat(String(data[k]).replace(',','.')) > 0;});
+  var added = 0;
+  ORDER.forEach(function(key){
+    if(!data[key]) return;
+    if(hasDims && dims.indexOf(key)>=0) return;
+    fg.insertAdjacentHTML('beforeend','<div class="fi"><div class="filbl">'+(MAP[key]||key)+'</div><div class="fival">'+data[key]+'</div></div>');
+    added++;
+  });
+  if(hasDims){
+    fg.insertAdjacentHTML('beforeend','<div class="fi"><div class="filbl">Dimensiones (cm)</div><div class="fival">'+data['Comprimento']+' × '+data['Largura']+' × '+data['Altura']+'</div></div>');
+    added++;
+  }
+  if(added===0){
+    document.getElementById('ficha').style.display='none';
+    document.getElementById('fnone').style.display='flex';
+  } else {
+    document.getElementById('ficha').style.display='block';
+  }
+}
+
+// ── Image preload (WP batch API) ──────────────────────────
+var IKEY='xl_v3'; var imgC={};
+try{ imgC=JSON.parse(localStorage.getItem(IKEY)||'{}'); }catch(e){}
+function saveI(){ try{ localStorage.setItem(IKEY,JSON.stringify(imgC)); }catch(e){} }
+
+function batchImg(slugs){
+  var url=WP+'/wp-json/wp/v2/posts?'+slugs.map(function(s){return 'slug[]='+encodeURIComponent(s);}).join('&')+'&_fields=slug,yoast_head_json&per_page=100';
+  return fetch(url,{signal:AbortSignal.timeout(12000)})
+    .then(function(r){return r.json();})
+    .then(function(posts){
+      var out={};
+      posts.forEach(function(post){
+        var img=(post.yoast_head_json&&post.yoast_head_json.og_image&&post.yoast_head_json.og_image[0]&&post.yoast_head_json.og_image[0].url)||'';
+        if(img) out[post.slug]=img;
+      });
+      return out;
+    })
+    .catch(function(){return {};});
+}
+
+function preload(){
+  PRODUCTS.forEach(function(p){ if(!p.img && p.slug && imgC[p.slug]) p.img=imgC[p.slug]; });
+  render();
+  var need=PRODUCTS.filter(function(p){return !p.img && p.slug && imgC[p.slug]===undefined;});
+  if(!need.length) return;
+  var slugs=need.map(function(p){return p.slug;});
+  function batch(i){
+    if(i>=slugs.length) return;
+    var sl=slugs.slice(i,i+60);
+    batchImg(sl).then(function(res){
+      need.filter(function(p){return sl.indexOf(p.slug)>=0;}).forEach(function(p){
+        var img=res[p.slug]||'';
+        imgC[p.slug]=img;
+        if(img) p.img=img;
+      });
+      saveI();
+      render();
+      batch(i+60);
+    });
+  }
+  batch(0);
+}
+
+// Init
+render();
+preload();
+</script>
+</body>
+</html>
