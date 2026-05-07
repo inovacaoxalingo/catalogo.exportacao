@@ -532,6 +532,33 @@ document.getElementById('ov').addEventListener('click', function(e){
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
 
 // ── Ficha técnica ─────────────────────────────────────────
+// ── CORS-safe fetch helper ────────────────────────────────
+// Tries direct → corsproxy.io → allorigins.win in sequence
+var PROXIES = [
+  function(u){ return u; },
+  function(u){ return 'https://corsproxy.io/?url='+encodeURIComponent(u); },
+  function(u){ return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u); }
+];
+
+function proxyFetch(apiUrl, timeout){
+  timeout = timeout || 10000;
+  var i = 0;
+  function next(){
+    if(i >= PROXIES.length) return Promise.reject(new Error('Todos os proxies falharam'));
+    var url = PROXIES[i++](apiUrl);
+    return fetch(url, {signal: AbortSignal.timeout(timeout)})
+      .then(function(r){
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        return r.json();
+      })
+      .catch(function(err){
+        console.warn('[CORS] tentativa '+(i)+' falhou ('+err.message+'), próximo proxy...');
+        return next();
+      });
+  }
+  return next();
+}
+
 var fichaC = {};
 var WP = 'https://produtosxalingo.oneweb.com.br';
 
@@ -562,27 +589,13 @@ function parseFicha(html){
 
 function fetchFicha(slug){
   var apiUrl = WP+'/wp-json/wp/v2/posts?slug='+encodeURIComponent(slug)+'&_fields=content&per_page=1';
-
-  function tryUrl(url){
-    return fetch(url, {signal: AbortSignal.timeout(10000)})
-      .then(function(r){
-        if(!r.ok) throw new Error('HTTP '+r.status);
-        return r.json();
-      })
-      .then(function(posts){
-        if(!posts || !posts.length){ throw new Error('Post não encontrado: '+slug); }
-        var html = (posts[0] && posts[0].content && posts[0].content.rendered) || '';
-        var data = parseFicha(html);
-        if(!data){ throw new Error('Tabela não encontrada no post: '+slug); }
-        return data;
-      });
-  }
-
-  // Tentativa 1: direto. Tentativa 2: via proxy CORS (caso file:// ou bloqueio)
-  return tryUrl(apiUrl)
-    .catch(function(err){
-      console.warn('[Ficha] direto falhou, tentando proxy CORS:', slug, err.message);
-      return tryUrl('https://corsproxy.io/?url='+encodeURIComponent(apiUrl));
+  return proxyFetch(apiUrl, 12000)
+    .then(function(posts){
+      if(!posts || !posts.length) throw new Error('Post não encontrado: '+slug);
+      var html = (posts[0] && posts[0].content && posts[0].content.rendered) || '';
+      var data = parseFicha(html);
+      if(!data) throw new Error('Tabela não encontrada: '+slug);
+      return data;
     })
     .then(function(data){ fichaC[slug]=data; return data; })
     .catch(function(err){
@@ -633,9 +646,8 @@ try{ imgC=JSON.parse(localStorage.getItem(IKEY)||'{}'); }catch(e){}
 function saveI(){ try{ localStorage.setItem(IKEY,JSON.stringify(imgC)); }catch(e){} }
 
 function batchImg(slugs){
-  var url=WP+'/wp-json/wp/v2/posts?'+slugs.map(function(s){return 'slug[]='+encodeURIComponent(s);}).join('&')+'&_fields=slug,yoast_head_json&per_page=100';
-  return fetch(url,{signal:AbortSignal.timeout(12000)})
-    .then(function(r){return r.json();})
+  var apiUrl=WP+'/wp-json/wp/v2/posts?'+slugs.map(function(s){return 'slug[]='+encodeURIComponent(s);}).join('&')+'&_fields=slug,yoast_head_json&per_page=100';
+  return proxyFetch(apiUrl, 15000)
     .then(function(posts){
       var out={};
       posts.forEach(function(post){
@@ -644,7 +656,7 @@ function batchImg(slugs){
       });
       return out;
     })
-    .catch(function(){return {};});
+    .catch(function(){ return {}; });
 }
 
 function preload(){
